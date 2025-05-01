@@ -5,13 +5,13 @@ import { toast } from "react-hot-toast";
 import useCategory from "../../hooks/useCategory.js";
 import { useCart } from "../../context/cart.js";
 import { Badge } from "antd";
-import "./header.css";
 
 const Header = () => {
   const [cart] = useCart();
   const [auth, setAuth] = useAuth();
   const category = useCategory();
   const [menuActive, setMenuActive] = useState(false);
+  const [userDashboard, setUserDashboard] = useState(false);
 
   // handle Logout
   const handleLogout = async () => {
@@ -28,27 +28,41 @@ const Header = () => {
     setMenuActive(!menuActive);
   };
 
+  // handle user dashboard
+  const handleUserDashboard = () => {
+    setUserDashboard(!userDashboard);
+  };
+
   return (
     <>
-      <nav className="navbar">
-        <div className="logo">
+      <nav className="w-full flex justify-between items-center py-2 bg-[#000b10] h-20 z-50">
+        <div className="w-fit pl-5">
           <NavLink to="/">
-            <img src="kamal.png" alt="logo" id="logo" />
+            <h1 className="font-bold text-center rounded-full px-2 py1 bg-white text-black">
+              Resanna
+            </h1>
           </NavLink>
         </div>
 
-        <div className="humburger" onClick={handleMenuList}>
-          <div className="burger"></div>
-          <div className="burger"></div>
-          <div className="burger"></div>
+        <div className="md:hidden mr-5 cursor-pointer" onClick={handleMenuList}>
+          <div className="w-8 rounded-sm h-1 bg-white"></div>
+          <div className="w-8 rounded-sm h-1 bg-white my-2"></div>
+          <div className="w-8 rounded-sm h-1 bg-white"></div>
         </div>
-        <div className={!menuActive ? "itemContainer" : ""}>
-          <ul className="unorderdList">
-            <li>
+
+        <div
+          className={
+            !menuActive
+              ? "hidden md:flex text-white text-lg font-bold pr-5"
+              : "md:hidden flex justify-center items-center top-[80px] bg-black w-full p-5 text-white absolute z-50 text-lg font-bold"
+          }
+        >
+          <ul className="flex justify-between items-center gap-5 list-none ">
+            <li className="hover:text-blue-400 transition duration-300 ease-in-out">
               <Link to="/">Home</Link>
             </li>
 
-            <li className="nav-item dropdown">
+            {/* <li className="nav-item dropdown">
               <Link
                 className="nav-link dropdown-toggle"
                 to={"/category"}
@@ -70,30 +84,23 @@ const Header = () => {
                   </li>
                 ))}
               </ul>
-            </li>
-
-            <li>
-              <NavLink to="/about">About</NavLink>
-            </li>
+            </li> */}
 
             {!auth?.user ? (
               <>
-                <li className="nav-item">
-                  <NavLink to="/register" className="nav-link">
-                    Register
-                  </NavLink>
+                <li className="hover:text-blue-400 transition duration-300 ease-in-out">
+                  <NavLink to="/register">Register</NavLink>
                 </li>
-                <li className="nav-item">
-                  <NavLink to="/login" className="nav-link">
-                    Login
-                  </NavLink>
+                <li className="hover:text-blue-400 transition duration-300 ease-in-out">
+                  <NavLink to="/login">Login</NavLink>
                 </li>
               </>
             ) : (
               <>
-                <li className="nav-item dropdown">
+                <li className="text-white hover:text-blue-400 transition duration-300 ease-in-out">
                   <NavLink
-                    className="nav-link dropdown-toggle"
+                    onClick={handleUserDashboard}
+                    className=""
                     href="#"
                     role="button"
                     data-bs-toggle="dropdown"
@@ -101,34 +108,49 @@ const Header = () => {
                   >
                     {auth?.user?.name}
                   </NavLink>
-                  <ul className="dropdown-menu">
-                    <li>
-                      <NavLink
-                        to={`/dashboard/${
-                          auth?.user?.role === 1 ? "admin" : "user"
-                        }`}
-                        className="dropdown-item"
+                  {!userDashboard ? (
+                    <>
+                      <ul
+                        className={
+                          !menuActive
+                            ? "absolute top-15 bg-white text-black p-5 rounded-md border right-1"
+                            : "absolute  bg-white text-black p-5 rounded-md border "
+                        }
                       >
-                        Dashboard
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink
-                        onClick={handleLogout}
-                        to="/login"
-                        className="dropdown-item"
-                      >
-                        Logout
-                      </NavLink>
-                    </li>
-                  </ul>
+                        <li>
+                          <NavLink
+                            to={`/dashboard/${
+                              auth?.user?.role == "admin" ? "admin" : "user"
+                            }`}
+                            className="dropdown-item hover:text-blue-400 transition duration-300 ease-in-out"
+                          >
+                            Dashboard
+                          </NavLink>
+                        </li>
+                        <li>
+                          <NavLink
+                            onClick={handleLogout}
+                            to="/login"
+                            className="dropdown-item hover:text-blue-400 transition duration-300 ease-in-out"
+                          >
+                            Logout
+                          </NavLink>
+                        </li>
+                      </ul>
+                    </>
+                  ) : (
+                    ""
+                  )}
                 </li>
               </>
             )}
 
             <li>
               <Badge count={cart?.length} showZero>
-                <NavLink to="/cart" className="cart">
+                <NavLink
+                  to="/cart"
+                  className="text-white text-lg font-bold hover:text-blue-400 transition duration-300 ease-in-out"
+                >
                   Cart
                 </NavLink>
               </Badge>
