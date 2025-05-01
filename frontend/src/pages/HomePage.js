@@ -6,7 +6,6 @@ import { Prices } from "../components/Prices";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/cart";
 import toast from "react-hot-toast";
-import "./homepage.css";
 
 const Homepage = () => {
   const [cart, setCart] = useCart();
@@ -72,7 +71,7 @@ const Homepage = () => {
   const filterProduct = async () => {
     try {
       const { data } = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/menu-product/filter-product`,
+        `${process.env.REACT_APP_API_URL}/menu-product/filter-product`,
         {
           checked,
           radio,
@@ -92,117 +91,87 @@ const Homepage = () => {
 
   return (
     <Layout title={"All Products - Best offers"}>
-      {/* add craousel */}
-      {/* <div
-        id="carouselExampleControls"
-        className="carousel slide"
-        data-bs-ride="carousel"
-      >
-        <div className="carousel-inner">
-          <div className="carousel-item active">
-            <img
-              src="/images/banner1.png"
-              className="d-block w-100"
-              alt="craousel"
-            />
+      <div className="w-full">
+        {/* price and category filter */}
+        <div className="flex justify-start items-start gap-4 flex-col px-2">
+          <div className="">
+            <h5 className="font-bold font-serif">Category</h5>
+            <div className="flex gap-2 items-start">
+              {category?.map((cat) => (
+                <Checkbox
+                  key={cat._id}
+                  onChange={(e) => {
+                    handleFilter(e.target.checked, cat._id);
+                  }}
+                  className="color"
+                >
+                  {cat.name}
+                </Checkbox>
+              ))}
+            </div>
           </div>
-          <div className="carousel-item">
-            <img
-              src="/images/banner2.png"
-              className="d-block w-100"
-              alt="..."
-            />
-          </div>
-          <div className="carousel-item">
-            <img
-              src="/images/banner3.png"
-              className="d-block w-100"
-              alt="..."
-            />
-          </div>
-        </div>
-      </div> */}
-      {/* end craousel */}
-      <div className="container-fluid row mt-2 home-page">
-        <div className="col-md-2 filters">
-          <h5 className="mt-2">Prices</h5>
-          <div className="d-flex flex-column ms-1">
-            <Radio.Group onChange={(e) => setRadio(e.target.value)}>
+          <div className="">
+            <h5 className="font-bold font-serif">Prices</h5>
+            <Radio.Group
+              onChange={(e) => setRadio(e.target.value)}
+              className="flex"
+            >
               {Prices?.map((p) => (
                 <div key={p._id}>
                   <Radio value={p.array} className="color">
                     {p.name}
-                  </Radio> 
+                  </Radio>
                 </div>
               ))}
             </Radio.Group>
           </div>
-          <h5 className="">Category</h5>
-          <div className="d-flex flex-column ms-1">
-            {category?.map((cat) => (
-              <Checkbox
-                key={cat._id}
-                onChange={(e) => {
-                  handleFilter(e.target.checked, cat._id);
-                }}
-                className="color"
-              >
-                {cat.name}
-              </Checkbox>
-            ))}
-          </div>
         </div>
-        <div className="col-md-10 ">
-          <div className="d-flex flex-wrap justify-content-center">
-            {products?.map((pro) => (
-              <div className="card m-2" key={pro._id}>
-                <img
-                  src={`${process.env.REACT_APP_API_URL}/menu-product/product-photo/${pro._id}`}
-                  className="card-img-top"
-                  alt={pro.name}
-                  width={"100%"}
-                  height={"300px"}
-                />
-                <div className="card-body">
-                  <div className="card-name-price">
-                    <h5 className="card-title">{pro.name}</h5>
-                    <h5 className="card-title card-price">
-                      {pro.price.toLocaleString("en-US", {
-                        style: "currency",
-                        currency: "USD",
-                      })}
-                    </h5>
-                  </div>
-                  <p className="card-text">
-                    {pro.description.substring(0, 40)}...
-                  </p>
-                  <div className="card-name-price">
-                    <button
-                      href="#"
-                      className="btn btn-primary ms-1"
-                      onClick={() => navigate(`/product/${pro.slug}`)}
-                    >
-                      More Details
-                    </button>
-                    <button
-                      href="#"
-                      className="btn btn-secondary ms-1"
-                      onClick={() => {
-                        setCart([...cart, pro]);
-                        localStorage.setItem(
-                          "cart",
-                          JSON.stringify([...cart, pro])
-                        );
-                        toast.success("Item add to cart successfully");
-                      }}
-                    >
-                      Add to Cart
-                    </button>
-                  </div>
+
+        <div className="flex justify-center items-center gap-5 mt-5">
+          {products?.map((pro) => (
+            <div className="max-w-52 m-2" key={pro._id}>
+              <img
+                src={`${process.env.REACT_APP_API_URL}/menu-product/product-photo/${pro._id}`}
+                className="w-fit h-fit rounded-md"
+                alt={pro.name}
+              />
+              <div className="">
+                <div className="flex justify-between my-3">
+                  <h5 className="font-mono">{pro.name}</h5>
+                  <h5 className="font-mono">
+                    {pro.price.toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                    })}
+                  </h5>
+                </div>
+                <p className="my-2">{pro.description.substring(0, 40)}...</p>
+                <div className="flex justify-between">
+                  <button
+                    href="#"
+                    className="bg-blue-500 cursor-pointer py-1 px-2 rounded-md text-sm hover:bg-blue-400"
+                    onClick={() => navigate(`/product/${pro.slug}`)}
+                  >
+                    More Details
+                  </button>
+                  <button
+                    href="#"
+                    className="bg-gray-400 cursor-pointer py-1 px-2 rounded-md text-sm hover:bg-gray-300"
+                    onClick={() => {
+                      setCart([...cart, pro]);
+                      localStorage.setItem(
+                        "cart",
+                        JSON.stringify([...cart, pro])
+                      );
+                      toast.success("Item add to cart successfully");
+                    }}
+                  >
+                    Add to Cart
+                  </button>
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </div>
     </Layout>

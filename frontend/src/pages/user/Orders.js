@@ -1,32 +1,34 @@
-import React, { useEffect, useState } from "react";
+// import React, { useEffect, useState } from "react";
 import Layout from "../../components/layout/Layout";
-import UserMenu from "../../components/layout/UserMenu";
-import axios from "axios";
-import { useAuth } from "../../context/Auth.js";
+// import axios from "axios";
+// import { useAuth } from "../../context/Auth.js";
 
 const Orders = () => {
-  const [auth, setAuth] = useAuth();
-  const [order, setOrders] = useState([]);
+  // const [auth, setAuth] = useAuth();
+  // const [order, setOrders] = useState([]);
 
   // get all orders
-  const getAllOrders = async () => {
-    try {
-      const { data } = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/orders`
-      );
-      setOrders(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    getAllOrders();
-  }, [auth?.user]);
+  // const getAllOrders = async () => {
+  //   try {
+  //     const { data } = await axios.get(
+  //       `${process.env.REACT_APP_API_URL}/orders`
+  //     );
+  //     setOrders(data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   getAllOrders();
+  // }, [auth?.user]);
+
   return (
     <Layout title={"Your - Orders"}>
-      <div className="container-fluid p-3">
+      <h1 className="text-center font-bold mt-10">
+        This page is not avilable, Page working...
+      </h1>
+      {/* <div className="container-fluid p-3">
         <div className="row" style={{ marginTop: "70px" }}>
-          <div className="col-md-3">{<UserMenu />}</div>
           <div className="col-md-9">
             <h2 className="text-center">All Orders</h2>
             {order?.map((item, index) => (
@@ -37,7 +39,6 @@ const Orders = () => {
                       <th scope="col">#</th>
                       <th scope="col">Status</th>
                       <th scope="col">Buyer</th>
-                      {/* <td scope="col">Orders</td> */}
                       <th scope="col">Payment</th>
                       <th scope="col">Quantity</th>
                     </tr>
@@ -47,7 +48,7 @@ const Orders = () => {
                       <td>{index + 1}</td>
                       <td>{item?.status}</td>
                       <td>{item?.buyer?.name}</td>
-                      {/* if your want to show date, install moment package in frontend side */}
+                      if your want to show date, install moment package in frontend side
                       <td>{item?.payment?.success ? "Success" : "Failed"}</td>
                       <td>{item?.products?.length}</td>
                     </tr>
@@ -80,7 +81,7 @@ const Orders = () => {
             ))}
           </div>
         </div>
-      </div>
+      </div> */}
     </Layout>
   );
 };

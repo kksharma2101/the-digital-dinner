@@ -2,14 +2,12 @@ import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../../context/Auth.js";
 import { toast } from "react-hot-toast";
-import useCategory from "../../hooks/useCategory.js";
 import { useCart } from "../../context/cart.js";
 import { Badge } from "antd";
 
 const Header = () => {
   const [cart] = useCart();
   const [auth, setAuth] = useAuth();
-  const category = useCategory();
   const [menuActive, setMenuActive] = useState(false);
   const [userDashboard, setUserDashboard] = useState(false);
 
@@ -39,7 +37,7 @@ const Header = () => {
         <div className="w-fit pl-5">
           <NavLink to="/">
             <h1 className="font-bold text-center rounded-full px-2 py1 bg-white text-black">
-              Resanna
+              k~Chef
             </h1>
           </NavLink>
         </div>
@@ -62,30 +60,6 @@ const Header = () => {
               <Link to="/">Home</Link>
             </li>
 
-            {/* <li className="nav-item dropdown">
-              <Link
-                className="nav-link dropdown-toggle"
-                to={"/category"}
-                data-bs-toggle="dropdown"
-              >
-                Categories
-              </Link>
-              <ul className="dropdown-menu">
-                <li>
-                  <Link className="dropdown-item" to={"/categories"}>
-                    All Categories
-                  </Link>
-                </li>
-                {category?.map((c) => (
-                  <li key={c._id}>
-                    <Link className="dropdown-item" to={`/category/${c.slug}`}>
-                      {c.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </li> */}
-
             {!auth?.user ? (
               <>
                 <li className="hover:text-blue-400 transition duration-300 ease-in-out">
@@ -98,17 +72,10 @@ const Header = () => {
             ) : (
               <>
                 <li className="text-white hover:text-blue-400 transition duration-300 ease-in-out">
-                  <NavLink
-                    onClick={handleUserDashboard}
-                    className=""
-                    href="#"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    style={{ border: "none" }}
-                  >
+                  <p onClick={handleUserDashboard} className="cursor-pointer">
                     {auth?.user?.name}
-                  </NavLink>
-                  {!userDashboard ? (
+                  </p>
+                  {userDashboard && (
                     <>
                       <ul
                         className={
@@ -138,8 +105,6 @@ const Header = () => {
                         </li>
                       </ul>
                     </>
-                  ) : (
-                    ""
                   )}
                 </li>
               </>

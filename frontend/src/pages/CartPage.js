@@ -2,18 +2,10 @@ import React from "react";
 import Layout from "../components/layout/Layout";
 import { useCart } from "../context/cart";
 import { useAuth } from "../context/Auth";
-// import { useNavigate } from "react-router-dom";
-// import DropIn from "braintree-web-drop-in-react";
-// import axios from "axios";
-// import toast from "react-hot-toast";
 
 const CartPage = () => {
-  // const navigate = useNavigate();
   const [auth] = useAuth();
   const [cart, setCart] = useCart();
-  // const [clientToken, setClientToken] = useState("");
-  // const [instance, setInstance] = useState("");
-  // const [loading, setLoading] = useState(false);
 
   // handle totalPrice
   const totalPrice = () => {
@@ -44,52 +36,12 @@ const CartPage = () => {
     }
   };
 
-  // get payment token
-  // const getPaymentToken = async () => {
-  //   try {
-  //     const { data } = await axios.get(
-  //       `${process.env.REACT_APP_API_URL}/product/braintree/token`
-  //     );
-  //     setClientToken(data?.clientToken);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getPaymentToken();
-  // }, [auth?.token]);
-
-  // // handlePayment
-  // const handlePayment = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const { nonce } = await instance.requestPaymentMethod();
-  //     // const { data } =
-  //     await axios.post(
-  //       `${process.env.REACT_APP_API_URL}/product/braintree/payment`,
-  //       {
-  //         nonce,
-  //         cart,
-  //       }
-  //     );
-  //     setLoading(false);
-  //     localStorage.removeItem("cart");
-  //     setCart([]);
-  //     navigate("/dashboard/user/orders");
-  //     toast.success("Payment Completed Successfully ");
-  //   } catch (error) {
-  //     console.log(error);
-  //     setLoading(false);
-  //   }
-  // };
-
   return (
     <Layout>
-      <div className="cart-page p-2" style={{ height: "90vw" }}>
-        <div style={{ marginTop: "70px" }}>
+      <div className="p-2">
+        <div>
           <div className="row">
-            <h1 className="text-center mt-2 came">
+            <h1 className="text-center font-bold text-lg">
               {`Hello Mr/Mis ${auth?.token && auth?.user?.name}`}
             </h1>
             <h4 className="text-center mt-1 text-secondary">
@@ -102,24 +54,31 @@ const CartPage = () => {
           </div>
 
           <div className="row">
-            <div className="col-md-7">
+            <div className="flex justify-center items-center gap-5 mt-5">
               {cart?.map((pro) => (
-                <div className="row card flex-row p-2 mt-2 mb-2" key={pro._id}>
+                <div className="max-w-52 m-2" key={pro._id}>
                   <div className="col-md-5">
                     <img
-                      src={`${process.env.REACT_APP_API_URL}/api/product/product-photo/${pro._id}`}
-                      class="card-img-top"
+                      src={`${process.env.REACT_APP_API_URL}/menu-product/product-photo/${pro._id}`}
+                      className="card-img-top"
                       alt={pro.name}
                       width={"100%"}
                       height={"90%"}
                     />
                   </div>
-                  <div className="col-md-7" style={{ color: "black" }}>
-                    <p>{pro?.name}</p>
-                    <p>{pro?.description.substring(0, 50)}</p>
-                    <p>{pro?.price}</p>
+                  <div className="flex justify-between flex-col my-3">
+                    <p className="font-mono">{pro?.name}</p>
+                    <p className="font-mono">
+                      {pro?.description.substring(0, 50)}
+                    </p>
+                    <p className="font-mono">
+                      {pro.price.toLocaleString("en-US", {
+                        style: "currency",
+                        currency: "USD",
+                      })}
+                    </p>
                     <button
-                      className="btn btn-danger"
+                      className="bg-red-600 py-1 rounded-md my-3"
                       onClick={() => handleRemoveItem(pro._id)}
                     >
                       Remove
@@ -128,6 +87,7 @@ const CartPage = () => {
                 </div>
               ))}
             </div>
+
             <div className="col-md-5 text-center">
               <h2>Cart Summary</h2>
               <h4 className="text-secondary">Total | Checkout | Payment</h4>

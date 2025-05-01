@@ -8,6 +8,7 @@ import CategoryForms from "../../components/form/CategoryForms";
 const CreateCategory = () => {
   const [categories, setCategories] = useState([]);
   const [name, setName] = useState("");
+  console.log(categories);
 
   // handle onsubmit
   const handleSubmit = async (e) => {
@@ -15,7 +16,7 @@ const CreateCategory = () => {
     // console.log(e);
     try {
       const { data } = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/category/create-category`,
+        `${process.env.REACT_APP_API_URL}/category/create-category`,
         {
           name,
         }
@@ -37,7 +38,7 @@ const CreateCategory = () => {
   const getAllCategory = async (req, res) => {
     try {
       const { data } = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/category/get-category`
+        `${process.env.REACT_APP_API_URL}/category/get-category`
       );
       if (data?.success) {
         setCategories(data?.category);
@@ -54,40 +55,30 @@ const CreateCategory = () => {
 
   return (
     <Layout title={"Dashboard - Create Category"}>
-      <div className="container-fluid p-3 dashboard">
-        <div className="row" style={{ marginTop: "70px" }}>
-          <div className="col-md-3">{<AdminMenu />}</div>
-          <div className="col-md-9">
-            <h2>Manage Category</h2>
-            <div className="p-3">
-              <CategoryForms
-                handleSubmit={handleSubmit}
-                value={name}
-                setValue={setName}
-              />
-            </div>
-            <div>
-              <table className="table">
-                <thead>
-                  <tr style={{ color: "white" }}>
-                    <th scope="col">Name</th>
-                    <th scope="col">Actions</th>
-                  </tr>
-                </thead>
-                <tbody style={{ color: "white" }}>
-                  {categories?.map((cate) => (
-                    <>
-                      <tr>
-                        <td key={cate._id}>{cate.name}</td>
-                      </tr>
-                    </>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+      <div className="flex justify-center flex-col gap-16 md:grid md:grid-cols-2 p-4">
+        <div className="">
+          <h2 className="text-center font-bold mb-4 text-lg">All Category</h2>
+          {categories?.map((cate) => (
+            <tr>
+              <td className="font-serif text-start" key={cate._id}>
+                - {cate?.name}
+              </td>
+            </tr>
+          ))}
+        </div>
+        <div className="flex justify-center flex-col mx-auto">
+          <h2 className="text-center font-bold mb-4 text-lg">
+            Create Category
+          </h2>
+
+          <CategoryForms
+            handleSubmit={handleSubmit}
+            value={name}
+            setValue={setName}
+          />
         </div>
       </div>
+      <div className="mt-20">{<AdminMenu />}</div>
     </Layout>
   );
 };

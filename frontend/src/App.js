@@ -10,12 +10,14 @@ import CreateCategory from "./pages/admin/CreateCategory";
 import CreateMenuItem from "./pages/admin/CreateMenuItem";
 import Orders from "./pages/user/Orders";
 import CartPage from "./pages/CartPage";
+import ProductDetails from "./pages/ProductDetails";
 
 function App() {
   return (
     <>
       <Routes>
         <Route path="/" element={<Homepage />} />
+        <Route path="/product/:slug" element={<ProductDetails />} />
         <Route path="/cart" element={<CartPage />} />
 
         <Route path="/dashboard" element={<PrivateRoutes />}>

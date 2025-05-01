@@ -1,5 +1,6 @@
 import JWT from "jsonwebtoken";
 import User from "../models/userModel.js";
+import user from "../models/userModel.js";
 
 export const userVerify = async (req, res, next) => {
   try {
@@ -16,8 +17,8 @@ export const userVerify = async (req, res, next) => {
 
 export const isAdmin = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user._id);
-    if (user.role !== "admin") {
+    const activeUser = await User.findById(req?.user?._id || req?.user.id);
+    if (activeUser.role !== "admin") {
       return res.status(401).send({
         success: false,
         message: "UnAuthorized Access",
@@ -26,7 +27,6 @@ export const isAdmin = async (req, res, next) => {
       next();
     }
   } catch (error) {
-    console.log(error);
     res.status(401).send({
       success: false,
       error,

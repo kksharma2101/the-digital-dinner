@@ -15,12 +15,13 @@ const CreateMenuItem = () => {
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [photo, setPhoto] = useState("");
+  const [available, setAvailable] = useState("");
 
   // get all categories
   const getAllCategories = async () => {
     try {
       const { data } = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/category/get-category`
+        `${process.env.REACT_APP_API_URL}/category/get-category`
       );
       if (data?.success) {
         setCategories(data?.category);
@@ -45,14 +46,15 @@ const CreateMenuItem = () => {
       productData.append("price", price);
       productData.append("photo", photo);
       productData.append("category", category);
+      productData.append("availbale", available);
 
       const { data } = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/menu-product/create-menu-item`,
+        `${process.env.REACT_APP_API_URL}/menu-product/create-menu-item`,
         productData
       );
       if (data?.success) {
         toast.success(data?.message);
-        navigate("/dashboard/admin/products");
+        navigate("/dashboard/admin");
       } else {
         toast.error("Error in product created");
       }
@@ -64,95 +66,93 @@ const CreateMenuItem = () => {
 
   return (
     <Layout title={"Dashboard - Create Product"}>
-      <div className="container-fluid p-3 dashboard">
-        <div className="row" style={{ marginTop: "70px" }}>
-          <div className="col-md-3">{<AdminMenu />}</div>
-          <div className="col-md-9">
-            <h2>Create Products</h2>
-            <div className="m-1 w-75">
-              {/* <form onSubmit={handleCreate}> */}
-              <Select
-                bordered={false}
-                placeholder="Select a category"
-                size="large"
-                showSearch
-                className="form-select p-0 mb-3"
-                onChange={(value) => {
-                  setCategory(value);
+      <div className="flex justify-center items-center flex-col gap-10 p-5">
+        <h2 className="text-center font-bold text-lg">Create Product</h2>
+        {photo && (
+          <div className="text-center">
+            <img
+              src={URL.createObjectURL(photo)}
+              alt="product"
+              height={"200px"}
+              className="img img-responsive"
+            />
+          </div>
+        )}
+
+        <div className="flex justify-center flex-col gap-4">
+          <div className="grid grid-cols-2 gap-4">
+            <input
+              type="text"
+              value={name}
+              placeholder="Write a name"
+              className="border p-2 rounded-md min-w-36 max-w-xs"
+              onChange={(e) => setName(e.target.value)}
+            />
+
+            <input
+              type="number"
+              value={price}
+              placeholder="Price"
+              className="border p-2 rounded-md min-w-36 max-w-xs"
+              onChange={(e) => setPrice(e.target.value)}
+            />
+
+            <input
+              type="text"
+              value={available}
+              placeholder="Available Product"
+              className="border p-2 rounded-md min-w-36 max-w-xs"
+              onChange={(e) => setAvailable(e.target.value)}
+            />
+            <Select
+              className="min-w-36 max-w-xs"
+              placeholder="Select a category"
+              size="large"
+              showSearch
+              onChange={(value) => {
+                setCategory(value);
+              }}
+            >
+              {categories?.map((c) => (
+                <Option key={c._id} value={c._id}>
+                  {c.name}
+                </Option>
+              ))}
+            </Select>
+          </div>
+
+          <div className="block w-full">
+            <textarea
+              type="text"
+              value={description}
+              placeholder="Description"
+              className="border p-2 rounded-md w-full mb-4"
+              onChange={(e) => setDescription(e.target.value)}
+            />
+
+            <label className="text-center text-sm font-serif">
+              <input
+                type="file"
+                name="photo"
+                accept="image/*"
+                onChange={(e) => {
+                  setPhoto(e.target.files[0]);
                 }}
-              >
-                {categories?.map((c) => (
-                  <Option key={c._id} value={c._id}>
-                    {c.name}
-                  </Option>
-                ))}
-              </Select>
-              <div className="mb-3">
-                <label className="btn btn-outline-secondary col-md-12">
-                  {photo ? photo.name : "Upload photo"}
-                  <input
-                    type="file"
-                    name="photo"
-                    accept="image/*"
-                    onChange={(e) => {
-                      setPhoto(e.target.files[0]);
-                    }}
-                    hidden
-                  />
-                </label>
-              </div>
-              <div className="mb-3">
-                {photo && (
-                  <div className="text-center">
-                    <img
-                      src={URL.createObjectURL(photo)}
-                      alt="product"
-                      height={"200px"}
-                      className="img img-responsive"
-                    />
-                  </div>
-                )}
-              </div>
-              <div className="mb-3">
-                <input
-                  type="text"
-                  value={name}
-                  placeholder="Write a name"
-                  className="form-control"
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </div>
-              <div className="mb-3">
-                <textarea
-                  type="text"
-                  value={description}
-                  placeholder="Description"
-                  className="form-control"
-                  onChange={(e) => setDescription(e.target.value)}
-                />
-              </div>
-              <div className="mb-3">
-                <input
-                  type="number"
-                  value={price}
-                  placeholder="Price"
-                  className="form-control"
-                  onChange={(e) => setPrice(e.target.value)}
-                />
-              </div>
-              <div>
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  onClick={handleCreate}
-                >
-                  Create Product
-                </button>
-              </div>
-              {/* </form> */}
-            </div>
+                className="border p-2 rounded-md w-full"
+              />
+              {photo ? photo.name : "pload photo"}
+            </label>
           </div>
         </div>
+
+        <button
+          type="submit"
+          className="bg-blue-500 font-bold py-1 hover:bg-blue-400 min-w-52 rounded-md"
+          onClick={handleCreate}
+        >
+          Create Product
+        </button>
+        <AdminMenu />
       </div>
     </Layout>
   );

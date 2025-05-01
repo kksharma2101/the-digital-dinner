@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Layout from "../../components/layout/Layout";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import "./authStyle.css";
 
@@ -19,7 +19,7 @@ const Register = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/register`,
+        `${process.env.REACT_APP_API_URL}/register`,
         {
           name,
           email,
@@ -50,83 +50,70 @@ const Register = () => {
 
   return (
     <Layout title={"Register - Ecommerce app"}>
-      <div className="container-fluid p-2 dashboard">
-        <div
-          className="form-container"
-          style={{ marginTop: "70px", color: "#000", height: "100vh" }}
+      <div className="flex justify-center items-center flex-col my-10">
+        <form
+          onSubmit={handleSubmit}
+          className="border p-5 rounded-md flex justify-center items-center flex-col gap-8"
         >
-          <form onSubmit={handleSubmit}>
-            <h1 className="title">Register Page</h1>
-            <div className="mb-2">
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="form-control"
-                id="exampleInputName"
-                placeholder="Name - atleast 8 character"
-                required
-                maxLength={8}
-              />
-            </div>
+          <h1 className="font-bold text-lg">Register Page</h1>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="border p-2 rounded-md w-72"
+            placeholder="Name - atleast 8 character"
+            required
+            maxLength={8}
+          />
 
-            <div className="mb-2">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="form-control"
-                id="exampleInputEmail"
-                placeholder="Email"
-                required
-              />
-            </div>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="border p-2 rounded-md w-72"
+            placeholder="Email"
+            required
+          />
 
-            <div className="mb-2">
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="form-control"
-                id="exampleInputPassword1"
-                placeholder="Password"
-                required
-              />
-            </div>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="border p-2 rounded-md w-72"
+            placeholder="Password"
+            required
+          />
 
-            <div className="mb-2">
-              <input
-                type="number"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                className="form-control"
-                id="exampleInputPhone"
-                placeholder="Phone Number"
-                required
-              />
-            </div>
+          <input
+            type="number"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            className="border p-2 rounded-md w-72"
+            placeholder="Phone Number"
+            required
+          />
 
-            <div className="mb-2">
-              <input
-                type="text"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                className="form-control"
-                id="exampleInputAddress"
-                placeholder="Address"
-                required
-              />
-            </div>
+          <input
+            type="role"
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            className="border p-2 rounded-md w-72"
+            placeholder="User Role"
+          />
 
-            <button
-              type="submit"
-              className="btn btn-primary"
-              style={{ paddingLeft: "100px" }}
-            >
-              Submit
-            </button>
-          </form>
-        </div>
+          <button
+            type="submit"
+            className="bg-blue-500 py-2 w-full rounded-md font-bold"
+          >
+            Submit
+          </button>
+          <p className="text-center text-gray-500 text-xs">
+            Already have an account?
+            <NavLink to="/login" className="text-blue-500">
+              Login
+            </NavLink>
+          </p>
+        </form>
       </div>
     </Layout>
   );

@@ -3,37 +3,20 @@ import { NavLink } from "react-router-dom";
 
 const AdminMenu = () => {
   return (
-    <>
-      <div className="text-center">
-        <div className="list-group">
-          <h3>Admin pannel</h3>
-          <NavLink
-            to="/dashboard/admin/create-category"
-            className="list-group-item list-group-item-action"
-          >
-            Create Category
-          </NavLink>
-          <NavLink
-            to="/dashboard/admin/create-product"
-            className="list-group-item list-group-item-action"
-          >
-            Create Product
-          </NavLink>
-          <NavLink
-            to="/dashboard/admin/products"
-            className="list-group-item list-group-item-action"
-          >
-            Product
-          </NavLink>
-          <NavLink
-            to="/dashboard/admin/orders"
-            className="list-group-item list-group-item-action"
-          >
-            Orders
-          </NavLink>
-        </div>
-      </div>
-    </>
+    <div className="flex justify-center items-center gap-5">
+      <NavLink
+        to="/dashboard/admin/create-category"
+        className="py-1 px-2 bg-gray-300 rounded-md"
+      >
+        Create Category
+      </NavLink>
+      <NavLink
+        to="/dashboard/admin/create-product"
+        className="py-1 px-2 bg-gray-300 rounded-md"
+      >
+        Create Product
+      </NavLink>
+    </div>
   );
 };
 

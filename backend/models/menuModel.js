@@ -12,9 +12,9 @@ const menuItemSchema = new Schema(
     },
     slug: {
       type: String,
-      required: true,
+      // required: true,
     },
-    available: { type: Boolean, default: true },
+    available: { type: String },
   },
   { timestamps: true }
 );
