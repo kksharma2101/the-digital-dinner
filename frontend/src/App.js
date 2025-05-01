@@ -1,53 +1,39 @@
-import React, { useState } from "react";
-import axios from "axios";
-import Menu from "./components/Menu.jsx";
-import Cart from "./components/Cart.jsx";
-import "./App.css";
+import { Routes, Route } from "react-router-dom";
+import Homepage from "./pages/HomePage";
+import Register from "./pages/auth/Register";
+import Login from "./pages/auth/Login";
+import PrivateRoutes from "./components/routes/PrivateRoutes";
+import Dashboard from "./pages/user/Dashboard";
+import AdminRoute from "./components/routes/AdminRoutes";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import CreateCategory from "./pages/admin/CreateCategory";
+import CreateMenuItem from "./pages/admin/CreateMenuItem";
+import Orders from "./pages/user/Orders";
+import CartPage from "./pages/CartPage";
 
 function App() {
-  const [cartItems, setCartItems] = useState([]);
-
-  const addToCart = (item) => {
-    setCartItems([...cartItems, item]);
-  };
-
-  const removeFromCart = (index) => {
-    const newCart = [...cartItems];
-    newCart.splice(index, 1);
-    setCartItems(newCart);
-  };
-
-  const submitOrder = async (items, total) => {
-    try {
-      const order = {
-        customerName: "Guest", // In a real app, get from auth
-        items,
-        total,
-      };
-
-      await axios.post("http://localhost:5000/api/orders", order);
-      alert("Order placed successfully!");
-      setCartItems([]);
-    } catch (err) {
-      console.error("Order submission failed:", err);
-      alert("Failed to place order");
-    }
-  };
-
   return (
-    <div className="App">
-      <header>
-        <h1>Restaurant Ordering System</h1>
-      </header>
-      <main>
-        <Menu addToCart={addToCart} />
-        <Cart
-          cartItems={cartItems}
-          removeFromCart={removeFromCart}
-          submitOrder={submitOrder}
-        />
-      </main>
-    </div>
+    <>
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+        <Route path="/cart" element={<CartPage />} />
+
+        <Route path="/dashboard" element={<PrivateRoutes />}>
+          <Route path="user" element={<Dashboard />} />
+          <Route path="user/orders" element={<Orders />} />
+        </Route>
+
+        <Route path="/dashboard" element={<AdminRoute />}>
+          <Route path="admin" element={<AdminDashboard />} />
+          <Route path="admin/create-category" element={<CreateCategory />} />
+          <Route path="admin/create-product" element={<CreateMenuItem />} />
+        </Route>
+
+        <Route path="/register" element={<Register />} />
+
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </>
   );
 }
 

@@ -2,26 +2,33 @@ import { Sequelize } from "sequelize";
 import mongoose from "mongoose";
 
 // MongoDB connection (for menu items)
-export const connectMenuDb = async () => {
+const connectMongoDB = async () => {
   try {
-    const connect = await mongoose.connect(
-      "mongodb://localhost:27017/",
-      process.env.MONGO_URI
-    );
-    if (connect) {
-      console.log("DB connected...");
-    }
-  } catch (e) {
-    console.log(`${e.message}`.red);
-    console.log("error");
+    await mongoose.connect("mongodb://localhost:27017/mini_restaurant_menu");
+    console.log("MongoDB connected");
+  } catch (error) {
+    console.error("MongoDB connection error:", error);
+    // process.exit(1);
   }
 };
 
 // PostgreSQL connection (for orders)
-export const connectOrderDb = new Sequelize(
+const sequelize = new Sequelize(
   "postgresql://localhost:5432/mydatabase" || process.env.PG_URI,
   {
     dialect: "postgres",
     logging: false,
   }
 );
+
+const connectPostgreSQL = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log("PostgreSQL connected");
+  } catch (error) {
+    console.error("PostgreSQL connection error:", error);
+    process.exit(1);
+  }
+};
+
+export { sequelize, connectPostgreSQL, connectMongoDB };
